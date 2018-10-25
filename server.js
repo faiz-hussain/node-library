@@ -1,28 +1,37 @@
 const express = require('express');
+
 const chalk = require('chalk');
+const path = require('path');
 const debug = require('debug')('server');
 const morgan = require('morgan');
-const path = require('path');
-const sql = require('mssql');
+// const sql = require('mssql');
 
 
 const app = express();
 const port = process.env.PORT || 8000;
 
-const config = {
-  user: 'faizal',
-  password: 'Password1',
-  server: 'fhnodelibrary.database.windows.net', // You can use 'localhost\\instance' to connect to named instance
-  database: 'NodeLibrary',
+// SQL DB connection
 
-  options: {
-    encrypt: true, // Use this if you're on Windows Azure
-  },
-};
+// const config = {
+//   user: 'faizal',
+//   password: 'Password1',
+//   server: 'fhnodelibrary.database.windows.net',
+// You can use 'localhost\\instance' to connect to named instance
+//   database: 'NodeLibrary',
 
-sql.connect(config).catch(err => debug(err));
+//   options: {
+//     encrypt: true, // Use this if you're on Windows Azure
+//   },
+// };
+
+// sql.connect(config).catch(err => debug(err));
 
 app.use(morgan('tiny'));
+app.use((req, res, next) => {
+  debug('my middleware');
+  next();
+});
+
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
@@ -33,13 +42,16 @@ const nav = [
 ];
 
 const bookRouter = require('./src/routes/bookRoutes')(nav);
+const adminRouter = require('./src/routes/adminRoutes')(nav);
 
 
 app.use('/books', bookRouter);
+app.use('/admin', adminRouter);
 
 app.get('/', (req, res) => {
   res.render('index', {
     title: 'Library',
+    nav,
   });
 });
 

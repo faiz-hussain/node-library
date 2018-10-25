@@ -1,3 +1,11 @@
 module.exports = {
-    "extends": "airbnb"
+    "extends": "airbnb",
+    "rules": {
+        "prefer-destructuring": ["error", {
+            "array": false,
+            "object": true
+        }, {
+                "enforceForRenamedProperties": false
+            }]
+    }
 };
