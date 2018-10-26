@@ -5,7 +5,6 @@ const path = require('path');
 const debug = require('debug')('server');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 // const sql = require('mssql');
